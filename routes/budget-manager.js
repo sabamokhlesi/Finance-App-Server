@@ -40,6 +40,6 @@ router.put(
   budgetController.updateTransaction
 );
 
-router.delete('/transaction/:transactionId', isAuth, budgetController.deleteTransaction);
+router.delete('/transaction', isAuth, budgetController.deleteTransaction);
 
 module.exports = router;

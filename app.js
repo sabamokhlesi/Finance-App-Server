@@ -44,7 +44,7 @@ res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 next();
 });
 
-app.use('/feed', budgetRoutes);
+app.use('/budget-manager', budgetRoutes);
 app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {

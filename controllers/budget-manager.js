@@ -5,6 +5,7 @@ const { validationResult } = require('express-validator/check');
 
 const Transaction = require('../models/transaction');
 const User = require('../models/user');
+const { default: Axios } = require('axios');
 
 exports.createTransaction = (req, res, next) => {
     const errors = validationResult(req);
@@ -20,22 +21,9 @@ exports.createTransaction = (req, res, next) => {
     const date = req.body.date;
     const person = req.body.person;
     const note = req.body.note;
-    let userId;
-    const transaction = new Transaction({
-      title: title,
-      amount: amount,
-      type: type,
-      category:category,
-      date:date,
-      person:person,
-      note:note,
-      userId: req.userId
-    });
-    transaction
-      .save()
-      .then(result => {
-        return User.findById(req.userId);
-      })
+    let userId = req.body.userId
+    const transaction = new Transaction({title: title,amount: amount,type: type,category:category,date:date,person:person,note:note,userId: userId});
+    transaction.save().then(result => {return User.findById(userId);})
       .then(user => {
         userId = user;
         user.transactions.push(transaction);
@@ -49,9 +37,7 @@ exports.createTransaction = (req, res, next) => {
         });
       })
       .catch(err => {
-        if (!err.statusCode) {
-          err.statusCode = 500;
-        }
+        if (!err.statusCode) {err.statusCode = 500;}
         next(err);
       });
   };
@@ -66,7 +52,7 @@ exports.createTransaction = (req, res, next) => {
           error.statusCode = 404;
           throw error;
         }
-        if (transaction.userId.toString() !== req.userId) {
+        if (transaction.userId.toString() !== req.params.userId) {
           const error = new Error('Not authorized!');
           error.statusCode = 403;
           throw error;
@@ -76,7 +62,7 @@ exports.createTransaction = (req, res, next) => {
         return Transaction.findByIdAndRemove(transactionId);
       })
       .then(result => {
-        return User.findById(req.userId);
+        return User.findById(req.params.userId);
       })
       .then(user => {
         user.transactions.pull(transactionId);
@@ -179,9 +165,10 @@ exports.updateTransaction = (req, res, next) => {
 
   exports.getTransactions = (req, res, next) => {
     const currentPage = req.query.page || 1;
+    const userId = req.query.userId
     const perPage = 50;
     let totalItems;
-    Transaction.find()
+    Transaction.find({userId:userId})
       .countDocuments()
       .then(count => {
         totalItems = count;
