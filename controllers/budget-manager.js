@@ -45,6 +45,7 @@ exports.createTransaction = (req, res, next) => {
 
   exports.deleteTransaction = (req, res, next) => {
     const transactionId = req.params.transactionId;
+    let userId
     Transaction.findById(transactionId)
       .then(transaction => {
         if (!transaction) {
@@ -52,17 +53,16 @@ exports.createTransaction = (req, res, next) => {
           error.statusCode = 404;
           throw error;
         }
-        if (transaction.userId.toString() !== req.params.userId) {
+        userId = transaction.userId.toString()
+        if (!userId) {
           const error = new Error('Not authorized!');
           error.statusCode = 403;
           throw error;
         }
-        // Check logged in user
-        // clearImage(post.imageUrl);
         return Transaction.findByIdAndRemove(transactionId);
       })
       .then(result => {
-        return User.findById(req.params.userId);
+        return User.findById(userId);
       })
       .then(user => {
         user.transactions.pull(transactionId);
@@ -190,3 +190,55 @@ exports.updateTransaction = (req, res, next) => {
         next(err);
       });
   };
+
+  exports.getUserBudgetInfo = (req,res,next)=>{
+    const userId = req.params.userId
+    User.findById(userId)
+    .then(user => {
+      if (!user) {
+        const error = new Error('user not found.');
+        error.statusCode = 401;
+        throw error;
+      }
+      return user.budgetInfo
+    })
+    .then(budgetInfo => {
+      res.status(200).json({
+        message: 'Fetched budget information successfully.',
+        budgetInfo:budgetInfo
+      });
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+  }
+
+  exports.updateUserBudgetInfo = (req,res,next)=>{
+    const userId = req.params.userId
+    const newInfo = req.body.newInfo
+    User.findById(userId)
+    .then(user => {
+      if (!user) {
+        const error = new Error('user not found.');
+        error.statusCode = 401;
+        throw error;
+      }
+      user.budgetInfo = newInfo
+      return user.save()
+    })
+    .then(user=> {
+      res.status(200).json({
+        message: 'Updated budget information successfully.',
+        budgetInfo:user.budgetInfo
+      });
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+  }

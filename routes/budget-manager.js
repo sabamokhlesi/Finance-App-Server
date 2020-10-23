@@ -24,7 +24,7 @@ router.post(
   budgetController.createTransaction
 );
 
-router.get('/transaction/:transactionId', isAuth, budgetController.getTransaction);
+router.get('/transaction/:transactionId',isAuth, budgetController.getTransaction);
 
 router.put(
   '/transaction/:transactionId',
@@ -40,6 +40,9 @@ router.put(
   budgetController.updateTransaction
 );
 
-router.delete('/transaction', isAuth, budgetController.deleteTransaction);
+router.delete('/transaction/:transactionId', isAuth,budgetController.deleteTransaction);
+
+router.get('/budget-info/:userId',isAuth,budgetController.getUserBudgetInfo)
+router.put('/budget-info/:userId',isAuth,budgetController.updateUserBudgetInfo)
 
 module.exports = router;

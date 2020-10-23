@@ -44,6 +44,7 @@ res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 next();
 });
 
+
 app.use('/budget-manager', budgetRoutes);
 app.use('/auth', authRoutes);
 
