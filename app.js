@@ -9,7 +9,6 @@ const budgetRoutes = require('./routes/budget-manager');
 const authRoutes = require('./routes/auth');
 
 const app = express();
-const csrfprotection = csrf()
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {

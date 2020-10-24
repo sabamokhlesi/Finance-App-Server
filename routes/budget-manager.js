@@ -6,9 +6,6 @@ const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
-// GET /budget-manager/transactions
-router.get('/transactions', isAuth, budgetController.getTransactions);
-
 // POST /budget-manager/transaction
 router.post(
   '/transaction',
@@ -19,12 +16,11 @@ router.post(
     body('category').trim().isLength({ min: 1 }),
     body('date').trim().isLength({ min: 1 }),
     body('person').trim().isLength({ min: 1 }),
-    body('type').trim().isLength({ min: 1 })
+    body('type').trim().isLength({ min: 1 }),
+    body('userId').trim().isLength({min:1})
   ],
   budgetController.createTransaction
 );
-
-router.get('/transaction/:transactionId',isAuth, budgetController.getTransaction);
 
 router.put(
   '/transaction/:transactionId',
@@ -44,5 +40,9 @@ router.delete('/transaction/:transactionId', isAuth,budgetController.deleteTrans
 
 router.get('/budget-info/:userId',isAuth,budgetController.getUserBudgetInfo)
 router.put('/budget-info/:userId',isAuth,budgetController.updateUserBudgetInfo)
+
+// GET /budget-manager/transactions
+router.get('/transactions/:userId', isAuth, budgetController.getTransactions);
+router.get('/transaction/:transactionId',isAuth, budgetController.getTransaction);
 
 module.exports = router;

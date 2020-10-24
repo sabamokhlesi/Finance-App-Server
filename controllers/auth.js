@@ -22,10 +22,10 @@ exports.signup = (req, res, next) => {
           email: email,
           password: hashedPw,
           budgetInfo:{
-            savingGoal:req.body.budgetInfo.savingGoal? req.body.budgetInfo.savingGoal:0,
-            totalBudget:req.body.budgetInfo.totalBudget?req.body.budgetInfo.totalBudget:0,
-            totalEarning:req.body.budgetInfo.totalEarning? req.body.budgetInfo.totalEarning:0,
-            categories: req.body.budgetInfo.categories? req.body.budgetInfo.categories: {}
+            savingGoal:0,
+            totalBudget:0,
+            totalEarning:0,
+            categories:{}
           }
         });
         return user.save();
