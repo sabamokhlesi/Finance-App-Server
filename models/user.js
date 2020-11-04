@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
+const { stringify } = require('querystring');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   email: {type: String,required: true},
+  firstName:{type:String,required:true},
+  lastName:{type:String,required:true},
   password:{type: String,required: true},
   budgetInfo:{
-    savingGoal:{type:Number,required:true},
-    totalBudget:{type:Number,required:true},
-    totalEarning:{type:Number,required:true},
-    categories:{type:Object,required:true},
+    categories:{type:Object}
   },
-  transactions: [{type: Schema.Types.ObjectId,ref: 'Transaction'}]
+  transactions: [{type: Schema.Types.ObjectId,ref:'Transaction'}]
   //  name: {type: String,required: true},
   // catrgories:[{category:{type:String,required:true},budget:{type:Number,required:true}}],
 });
