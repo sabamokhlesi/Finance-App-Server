@@ -23,7 +23,7 @@ router.post(
 );
 
 router.put(
-  '/transaction/:transactionId',
+  '/transaction',
   isAuth,
   [
     body('title').trim().isLength({ min: 1 }),
@@ -31,7 +31,8 @@ router.put(
     body('category').trim().isLength({ min: 1 }),
     body('date').trim().isLength({ min: 1 }),
     body('person').trim().isLength({ min: 1 }),
-    body('type').trim().isLength({ min: 1 })
+    body('type').trim().isLength({ min: 1 }),
+    body('userId').trim().isLength({ min: 1 })
   ],
   budgetController.updateTransaction
 );

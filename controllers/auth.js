@@ -20,29 +20,27 @@ exports.signup = (req, res, next) => {
       .hash(password, 12)
       .then(hashedPw => {
         const user = new User({
-          firstName:firstName,
-          lastName:lastName,
           email: email,
           password: hashedPw,
           budgetInfo:{
-            // savingGoal:0,
-            // totalBudget:0,
-            // totalEarning:0,
+            firstName:firstName,
+            lastName:lastName,
             categories:{}
           }
         });
         return user.save();
       })
       .then(result => {
+        const expirationH = 24
         const token = jwt.sign(
             {
               email: email,
               userId: result._id.toString()
             },
             'somesupersecretsecret',
-            { expiresIn: '5h' }
+            { expiresIn: `${expirationH}h` }
           );
-        res.status(201).json({ message: 'User created!', userId: result._id, token:token});
+        res.status(201).json({ message: 'User created!', userId: result._id, token:token,expirationTime:expirationH});
       })
       .catch(err => {
         if (!err.statusCode) {
@@ -72,15 +70,16 @@ exports.signup = (req, res, next) => {
           error.statusCode = 401;
           throw error;
         }
+        const expirationH = 24
         const token = jwt.sign(
           {
             email: loadedUser.email,
             userId: loadedUser._id.toString()
           },
           'somesupersecretsecret',
-          { expiresIn: '5h' }
+          { expiresIn: `${expirationH}h` }
         );
-        res.status(200).json({ token: token, userId: loadedUser._id.toString() });
+        res.status(200).json({ token: token, userId: loadedUser._id.toString(),expirationTime:expirationH});
       })
       .catch(err => {
         if (!err.statusCode) {

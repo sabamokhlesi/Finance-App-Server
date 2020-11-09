@@ -85,7 +85,7 @@ exports.createTransaction = (req, res, next) => {
 //   };
 
 exports.updateTransaction = (req, res, next) => {
-    const transactionId = req.params.transactionId;
+    const transactionId = req.body._id;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const error = new Error('Validation failed, entered data is incorrect.');
