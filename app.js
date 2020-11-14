@@ -57,9 +57,9 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    'mongodb+srv://Saba:456456@cluster0.j93bd.mongodb.net/budget-manager?retryWrites=true&w=majority'
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.j93bd.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
   )
   .then(result => {
-    app.listen(8080);
+    app.listen(process.env.PORT || 8080);
   })
   .catch(err => console.log(err));

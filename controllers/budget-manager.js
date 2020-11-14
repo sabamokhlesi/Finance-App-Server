@@ -164,9 +164,11 @@ exports.updateTransaction = (req, res, next) => {
   };
 
   exports.getTransactions = (req, res, next) => {
-    const currentPage = req.query.page || 1;
+    // const currentPage = req.query.page || 1;
+    // const perPage = 50;
+    const fromDate = req.query.fromDate
+    const toDate = req.query.toDate
     const userId = req.params.userId
-    const perPage = 50;
     let totalItems;
     Transaction.find({userId:userId})
       .countDocuments()
@@ -175,9 +177,10 @@ exports.updateTransaction = (req, res, next) => {
               res.status(200).json({message:'No transaction found',totalItems:count})
           }
         totalItems = count;
-        return Transaction.find({userId:userId})
-          .skip((currentPage - 1) * perPage)
-          .limit(perPage);
+        return Transaction.find({userId:userId,date: { $gte: fromDate, $lte: toDate }}).sort({ date: -1 })
+
+          // .skip((currentPage - 1) * perPage)
+          // .limit(perPage);
       })
       .then(transactions => {
         res.status(200).json({

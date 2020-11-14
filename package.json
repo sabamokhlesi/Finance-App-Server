@@ -4,8 +4,11 @@
   "description": "the server of budget manager ",
   "main": "index.js",
   "scripts": {
+    
+    "start-server": "node app.js",
+    "start:dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "NODE_ENV=production MONGO_USER=Saba MONGO_PASSWORD=456456 MONGO_DEFAULT_DATABASE=budget-manager node app.js"
   },
   "author": "Saba Mokhlesi",
   "license": "ISC",
@@ -23,3 +26,4 @@
     "nodemon": "^2.0.6"
   }
 }
+
