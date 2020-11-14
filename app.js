@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const csrf = require('csurf')
-
+const helmet =require("helmet")
+const compression = require('compression')
 const budgetRoutes = require('./routes/budget-manager');
 const authRoutes = require('./routes/auth');
 
@@ -46,6 +47,8 @@ next();
 
 app.use('/budget-manager', budgetRoutes);
 app.use('/auth', authRoutes);
+app.use(helmet())
+app.use(compression())
 
 app.use((error, req, res, next) => {
     console.log(error);
