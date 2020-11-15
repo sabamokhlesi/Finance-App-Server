@@ -9,9 +9,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
-  "engines": {
-    "node": "12.14.1"
-  },
   "author": "Saba Mokhlesi",
   "license": "ISC",
   "dependencies": {
