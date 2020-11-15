@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 
 const Transaction = require('../models/transaction');
 const User = require('../models/user');
-const { default: Axios } = require('axios');
+// const { default: Axios } = require('axios');
 
 exports.createTransaction = (req, res, next) => {
     const errors = validationResult(req);
